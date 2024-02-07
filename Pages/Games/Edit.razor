@@ -1,0 +1,20 @@
+﻿@page "/games/{Id:int}"
+@using Jeux.Data
+@inject GameService GameService
+
+@if (game != null)
+{
+    <h3>@game.Name</h3>    
+}
+
+@code {
+    private Game? game;
+
+    [Parameter]
+    public int Id { get; set; }
+
+    override protected async Task OnInitializedAsync()
+    {
+        game = await GameService.Get(Id);
+    }
+}

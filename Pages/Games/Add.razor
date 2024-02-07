@@ -1,0 +1,41 @@
+﻿@page "/games/add"
+@using Jeux.Data
+@inject GameService GameService
+@inject NavigationManager NavigationManager
+<PageTitle>Créer un jeu</PageTitle>
+
+<form @onsubmit="Save">
+<div class="form-group">
+        <label for="name">Nom</label>
+        <input type="text" class="form-control" id="name" placeholder="Nom du jeu" @bind="Game.Name">
+    </div>
+    <div class="form-group">
+        <label for="description">Description</label>
+        <input type="text" class="form-control" id="description" placeholder="Description du jeu" @bind="Game.Description">
+    </div>
+    <button type="submit" class="btn btn-primary" disabled="@Saving">Ajouter</button>
+</form>
+
+@code{
+    private Game Game = new Game
+    {
+        Description = "",
+        Name = "",
+        Owners = new List<GameOwner>()
+    };
+    private bool Saving { get; set; } = false;
+
+    protected async Task Save()
+    {
+        Saving = true;
+        try
+        {
+            await GameService.Add(Game);
+            NavigationManager.NavigateTo("/games");
+        }
+        finally
+        {
+            Saving = false;
+        }
+    }
+}

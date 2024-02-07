@@ -1,0 +1,10 @@
+﻿namespace Jeux.Data
+{
+    public class Game
+    {
+        public int Id { get; set; }
+        public required string Name { get; set; }
+        public required string Description { get; set; }
+        public required virtual ICollection<GameOwner> Owners { get; set; }
+    }
+}

@@ -1,0 +1,53 @@
+﻿@page "/players/{PlayerId:int}/games"
+@using Jeux.Data
+@inject GameService GameService
+@inject PlayerService PlayerService
+
+<PageTitle>Liste des jeux de @player?.Name</PageTitle>
+
+<h1>Liste des jeux de @player?.Name</h1>
+
+@if (games == null)
+{
+    <p><em>Chargement...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Qui l'a ?</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var game in games)
+            {
+                <tr>
+                    <td><a href="/games/@game.Id">@game.Name</a></td>
+                    <td>
+                        @foreach (var owner in game.Owners)
+                        {
+                            @owner.Owner.Name
+                        })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <a href="/players/@PlayerId/games/add">Ajouter un jeu</a>
+}
+
+@code {
+    private Game[]? games;
+    private Player? player;
+
+    [Parameter]
+    public int PlayerId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        player = await PlayerService.Get(PlayerId);
+        games = await GameService.GetForPlayer(PlayerId);
+    }
+}
